@@ -1,8 +1,5 @@
 # MERN Workout Tracker
 
-![GitHub Repo stars](https://img.shields.io/github/stars/yourusername/yourrepo)  
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/yourrepo)
-
 > My first full-stack MERN project! A workout tracker web app that lets users log workouts, visualize progress, and filter workout history.
 
 I followed the **Net Ninja MERN Stack Tutorial #1 & #2** to get started and added some custom features of my own.
