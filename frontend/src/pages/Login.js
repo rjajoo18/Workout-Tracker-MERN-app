@@ -1,8 +1,9 @@
-// Login.js
 import { useState } from 'react'
 import { useLogin } from '../hooks/useLogin'
+import { useTheme } from '../context/ThemeContext'
 
 const Login = () => {
+    const { darkMode } = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const { login, error, isLoading } = useLogin()
@@ -12,31 +13,54 @@ const Login = () => {
         await login(email, password)
     }
 
+    const inputStyle = {
+        padding: '8px',
+        borderRadius: '6px',
+        marginBottom: '10px',
+        border: `1px solid ${darkMode ? '#555' : '#ccc'}`,
+        backgroundColor: darkMode ? '#333' : '#fff',
+        color: darkMode ? '#fff' : '#000',
+        outline: 'none'
+    }
+
+    const buttonStyle = {
+        padding: '8px 12px',
+        borderRadius: '6px',
+        backgroundColor: darkMode ? '#444' : '#fff',
+        color: darkMode ? '#fff' : '#000',
+        border: `1px solid ${darkMode ? '#666' : '#ccc'}`,
+        cursor: 'pointer'
+    }
+
+    const formStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        backgroundColor: darkMode ? '#1c1c1c' : '#f9f9f9',
+        padding: '20px',
+        borderRadius: '10px',
+        maxWidth: '350px',
+        margin: '50px auto',
+        boxShadow: darkMode ? '0 4px 8px rgba(0,0,0,0.6)' : '0 4px 8px rgba(0,0,0,0.2)'
+    }
+
+    const labelStyle = { color: darkMode ? '#fff' : '#000' }
+
     return (
-        <form className="login" onSubmit={handleSubmit}>
-            <h3>Log in</h3>
+        <form onSubmit={handleSubmit} style={formStyle}>
+            <h3 style={{ color: darkMode ? '#fff' : '#000' }}>Log in</h3>
 
-            <label>Email:</label>
-            <input
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                required
-            />
+            <label style={labelStyle}>Email:</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} required />
 
-            <label>Password:</label>
-            <input
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                required
-            />
+            <label style={labelStyle}>Password:</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} required />
 
-            <button type="submit" disabled={isLoading}>
+            <button type="submit" style={buttonStyle} disabled={isLoading}>
                 {isLoading ? 'Logging in...' : 'Log in'}
             </button>
 
-            {error && <div className="error">{error}</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
         </form>
     )
 }

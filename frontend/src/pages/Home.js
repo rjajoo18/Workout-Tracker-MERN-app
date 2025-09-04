@@ -1,47 +1,55 @@
-import { useEffect } from 'react'
-import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
-import { useAuthContext } from '../hooks/useAuthContext'
-
-// components
 import WorkoutDetails from '../components/WorkoutDetails'
 import WorkoutForm from '../components/WorkoutForm'
+import { useTheme } from '../context/ThemeContext'
 
+const Home = ({ workouts }) => {
+  const { darkMode } = useTheme()
 
-const Home = () => {
-    const {workouts, dispatch} = useWorkoutsContext()
-    const {user} = useAuthContext()
+  const homeStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '20px',
+    padding: '20px',
+    backgroundColor: darkMode ? '#1c1c1c' : '#f9f9f9',
+    minHeight: '100vh'
+  }
 
-    useEffect(() => {
-        const fetchWorkouts = async () => {
-            const response = await fetch('/api/workouts', {
-                headers: {
-                    'Authorization': `Bearer ${user.token}`
-                }
-            })
-            const json = await response.json()
+  const workoutsStyle = {
+    flex: 3,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px'
+  }
 
-            if(response.ok){
-                dispatch({type: 'SET_WORKOUTS', payload: json})
-            }
-        }
+  const headerStyle = {
+    fontSize: '28px',
+    fontWeight: 'bold',
+    padding: '10px 20px',
+    borderRadius: '10px',
+    backgroundColor: darkMode ? '#444' : '#e0e0e0',
+    color: darkMode ? '#fff' : '#000',
+    boxShadow: darkMode
+      ? '0 4px 8px rgba(0,0,0,0.6)'
+      : '0 4px 8px rgba(0,0,0,0.2)',
+    alignSelf: 'flex-start',
+    marginBottom: '20px'
+  }
 
-        if (user) {
-            fetchWorkouts()
-        }
-        
-    }, [dispatch, user])
+  const formContainerStyle = { flex: 1 }
 
-
-    return (
-        <div className = "home">
-            <div className = "workouts">
-                { workouts && workouts.map((workout) => (
-                    <WorkoutDetails key = {workout._id} workout={workout}/>
-                ))}
-            </div>
-            <WorkoutForm />
-        </div>
-    )
+  return (
+    <div style={homeStyle}>
+      <div style={workoutsStyle}>
+        <div style={headerStyle}>Home</div>
+        {workouts && workouts.map((workout) => (
+          <WorkoutDetails key={workout._id || workout.title} workout={workout} />
+        ))}
+      </div>
+      <div style={formContainerStyle}>
+        <WorkoutForm />
+      </div>
+    </div>
+  )
 }
 
 export default Home

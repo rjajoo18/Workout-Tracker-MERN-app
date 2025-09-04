@@ -1,10 +1,12 @@
 import { useState } from "react"
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import { useAuthContext } from "../hooks/useAuthContext"
+import { useTheme } from '../context/ThemeContext'
 
 const WorkoutForm = () => {
     const { dispatch } = useWorkoutsContext()
     const { user } = useAuthContext()
+    const { darkMode } = useTheme()
 
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
@@ -19,7 +21,7 @@ const WorkoutForm = () => {
             return
         }
 
-        const workout = {title, load, reps}
+        const workout = { title, load, reps }
 
         const response = await fetch('/api/workouts', {
             method: 'POST',
@@ -29,58 +31,77 @@ const WorkoutForm = () => {
                 'Authorization': `Bearer ${user.token}`
             }
         })
+
         const json = await response.json()
 
         if (!response.ok) {
             setError(json.error)
-            setEmptyFields(json.emptyFields)
-        }
-
-        if(response.ok) {
+            setEmptyFields(json.emptyFields || [])
+        } else {
             setTitle('')
             setLoad('')
             setReps('')
             setError(null)
             setEmptyFields([])
-            console.log('new workout added', json)
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
+            dispatch({ type: 'CREATE_WORKOUT', payload: json })
         }
     }
 
+    const inputStyle = (field) => ({
+        padding: '8px',
+        marginBottom: '10px',
+        borderRadius: '6px',
+        backgroundColor: darkMode ? '#333' : '#fff',
+        color: darkMode ? '#fff' : '#000',
+        border: `1px solid ${emptyFields.includes(field) ? 'red' : darkMode ? '#555' : '#ccc'}`,
+        outline: 'none'
+    })
+
+    const buttonStyle = {
+        padding: '8px 12px',
+        borderRadius: '6px',
+        backgroundColor: darkMode ? '#444' : '#fff',
+        color: darkMode ? '#fff' : '#000',
+        border: `1px solid ${darkMode ? '#666' : '#ccc'}`,
+        cursor: 'pointer'
+    }
+
     return (
-        <form className="create" onSubmit = {handleSubmit}>
-            <h3>Add a New Workout</h3>
-            <label>Exercise Title:</label>
+        <form className="create" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <h3 style={{ color: darkMode ? '#fff' : '#000' }}>Add a New Workout</h3>
+
+            <label style={{ color: darkMode ? '#fff' : '#000' }}>Exercise Title:</label>
             <input 
                 type="text"
-                onChange={(e) => setTitle(e.target.value)}
                 value={title}
-                className = {emptyFields.includes('title') ? 'error' : ''}
-            />
-            <label>Load (in kg):</label>
-            <input 
-                type= "number"
-                onChange={(e) => setLoad(e.target.value)}
-                value={load}
-                className = {emptyFields.includes('load') ? 'error' : ''}
-            />
-            <label>Reps:</label>
-            <input 
-                type="number"
-                onChange={(e) => setReps(e.target.value)}
-                value={reps}
-                className = {emptyFields.includes('reps') ? 'error' : ''}
+                onChange={(e) => setTitle(e.target.value)}
+                style={inputStyle('title')}
             />
 
-            <button>Add Workout</button>
+            <label style={{ color: darkMode ? '#fff' : '#000' }}>Load (in kg):</label>
+            <input 
+                type="number"
+                value={load}
+                onChange={(e) => setLoad(e.target.value)}
+                style={inputStyle('load')}
+            />
+
+            <label style={{ color: darkMode ? '#fff' : '#000' }}>Reps:</label>
+            <input 
+                type="number"
+                value={reps}
+                onChange={(e) => setReps(e.target.value)}
+                style={inputStyle('reps')}
+            />
+
+            <button type="submit" style={buttonStyle}>Add Workout</button>
+
             {error && (
-                <div className="error">
+                <div style={{ color: 'red', marginTop: '10px' }}>
                     <p>{error}</p>
-                    {emptyFields.length > 0 && (
-                     <p>Missing fields: {emptyFields.join(', ')}</p>
-                    )}
+                    {emptyFields.length > 0 && <p>Missing fields: {emptyFields.join(', ')}</p>}
                 </div>
-)}
+            )}
         </form>
     )
 }
