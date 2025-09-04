@@ -1,27 +1,29 @@
-MERN Workout Tracker
+# MERN Workout Tracker
 
-This is my first full-stack MERN project, a workout tracker web app that lets users log workouts, visualize progress, and filter workout history. I followed the Net Ninja MERN Stack Tutorial #1 & #2 to get started and added a few custom features of my own.
+![GitHub Repo stars](https://img.shields.io/github/stars/yourusername/yourrepo)  
+![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/yourrepo)
 
-Features
+> My first full-stack MERN project! A workout tracker web app that lets users log workouts, visualize progress, and filter workout history.
 
-User Authentication: Secure signup and login system.
+I followed the **Net Ninja MERN Stack Tutorial #1 & #2** to get started and added some custom features of my own.
 
-Workout Logging: Add, edit, and delete workouts with title, load, and reps.
+---
 
-Dark Mode: Toggle between light and dark themes for comfortable usage.
+## Features
 
-Graph Tracking: Visual chart showing total load lifted over time.
+- **User Authentication:** Secure signup and login system.
+- **Workout Logging:** Add, edit, and delete workouts with title, load, and reps.
+- **Dark Mode:** Toggle between light and dark themes for comfortable usage.
+- **Graph Tracking:** Visual chart showing total load lifted over time.
+- **Filters:** Filter workouts based on title or date for easier tracking.
 
-Filters: Filter workouts based on title for easier tracking.
+---
 
-Tech Stack
+## Tech Stack
 
-Frontend: React, Context API, React Router
+- **Frontend:** React, Context API, React Router  
+- **Backend:** Node.js, Express  
+- **Database:** MongoDB (with Mongoose)  
+- **Visualization:** Chart.js (for graphs)  
+- **Styling:** CSS with dark mode toggle  
 
-Backend: Node.js, Express
-
-Database: MongoDB (with Mongoose)
-
-Visualization: Chart.js (for graphs)
-
-Styling: CSS with dark mode toggle
